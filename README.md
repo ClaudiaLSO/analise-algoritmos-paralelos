@@ -1,1 +1,66 @@
-ANÁLISE DE DESEMPENHO DE ALGORITMOS DE ORDENAÇÃO EM AMBIENTES PARALELOS E CONCORRENTESAutores: Claudia Oliveira Disciplina: Computação Paralela e ConcorrenteInstituição: UNIFOR – Universidade de FortalezaData: Maio de 20261. RESUMOEste trabalho apresenta uma investigação sobre o desempenho dos algoritmos de ordenação Bubble Sort, Selection Sort, Merge Sort e Quick Sort em ambientes seriais e paralelos. Utilizando a linguagem Java e o framework Fork/Join, os algoritmos foram testados sob diferentes cargas de dados e configurações de núcleos (2, 4 e 8 threads). Os resultados foram analisados estatisticamente em um ambiente Jupyter Notebook, revelando o impacto do overhead de threads em algoritmos eficientes e o ganho de velocidade (speedup) em algoritmos de alta complexidade computacional.Palavras-chave: Computação Paralela. Java Fork/Join. Speedup. Ordenação. Análise de Algoritmos.2. INTRODUÇÃOA computação paralela é essencial para otimizar o processamento em hardware moderno. Este projeto compara o comportamento de algoritmos $O(n^2)$ e $O(n \log n)$, avaliando em quais cenários a divisão de tarefas entre múltiplos núcleos de processamento compensa o custo de gerenciamento do sistema operacional e da JVM.3. METODOLOGIA3.1. Hardware e Ambiente de TesteProcessador: Intel Core i5-8265U (4 núcleos físicos / 8 threads lógicos).Memória: 12GB RAM.SO: Windows 11.Linguagem: Java 21 (Framework Fork/Join).Análise de Dados: Python 3.x no Jupyter Notebook (Pandas e Plotly).3.2. Procedimento ExperimentalOs testes consistiram na geração de vetores aleatórios de $1.000$, $5.000$ e $10.000$ elementos. Foram coletadas 5 amostras para cada configuração para garantir a consistência estatística. Os tempos foram registrados em milissegundos e exportados para um arquivo resultados.csv.4. IMPLEMENTAÇÃO TÉCNICAO projeto está estruturado nos seguintes arquivos:SortAlgorithm.java: Interface base.SortingProvider.java: Contém a lógica de ordenação. Para as versões paralelas de Merge e Quick Sort, utilizou-se a classe RecursiveAction.Main.java: Controlador do framework de testes e exportação de dados.analise_completa.ipynb: Notebook responsável pelo tratamento de dados e geração dos gráficos de desempenho e Speedup.5. RESULTADOS E DISCUSSÃO5.1. Comparativo de TempoConforme os dados coletados, algoritmos como o Bubble Sort apresentaram os melhores resultados com paralelismo, reduzindo o tempo de execução médio de $116$ms para cerca de $54$ms em vetores de $10.000$ posições.5.2. O Fenômeno do OverheadPara algoritmos de divisão e conquista (Quick e Merge), a versão serial superou a paralela no cenário de $10.000$ elementos. Isso demonstra que o custo de criar e sincronizar threads superou o tempo de ordenação, indicando que o paralelismo nesses casos só é vantajoso para volumes de dados massivos ($>100.000$).5.3. Análise de SpeedupO gráfico de Speedup gerado no Jupyter confirmou a Lei de Amdahl. O ganho de desempenho não foi linear, estabilizando-se após a utilização de 4 threads, que corresponde ao número de núcleos físicos do processador utilizado.6. CONCLUSÃOO trabalho validou que o paralelismo é uma ferramenta poderosa, mas deve ser aplicada criteriosamente. Para problemas "pequenos" ou algoritmos muito eficientes, o custo de coordenação das threads pode degradar a performance. O uso de ferramentas de análise dinâmica (Jupyter/Plotly) permitiu uma visualização clara desses limites e facilitou a compreensão teórica do hardware.7. REFERÊNCIASASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. NBR 6023: informação e documentação: referências. Rio de Janeiro, 2018.CORMEN, T. H. et al. Algoritmos: teoria e prática. 3. ed. Rio de Janeiro: Elsevier, 2012.DEITEL, P.; DEITEL, H. Java: como programar. 10. ed. São Paulo: Pearson, 2016.ORACLE. Java Platform, Standard Edition 21 API Specification. 2026.Como rodar este projeto:Compile os arquivos Java na pasta src/.Execute a classe Main.java para gerar o resultados.csv.Abra o analise_completa.ipynb no VS Code ou Jupyter para visualizar os gráficos.
+# [RELATÓRIO TÉCNICO] ANÁLISE DE DESEMPENHO DE ALGORITMOS DE ORDENAÇÃO
+
+**Autores:** Claudia Oliveira
+**Disciplina:** Computação Paralela e Concorrente  
+**Instituição:** UNIFOR – Universidade de Fortaleza  
+**Data:** Maio de 2026
+
+---
+
+## 1. RESUMO
+
+Este trabalho apresenta uma investigação sobre o desempenho dos algoritmos de ordenação Bubble Sort, Selection Sort, Merge Sort e Quick Sort em ambientes seriais e paralelos. Utilizando a linguagem Java e o framework Fork/Join, os algoritmos foram testados sob diferentes cargas de dados e configurações de núcleos (2, 4 e 8 threads). 
+
+Os resultados foram analisados estatisticamente em um ambiente Jupyter Notebook, revelando o impacto do *overhead* de threads em algoritmos eficientes e o ganho de velocidade (*speedup*) em algoritmos de alta complexidade computacional.
+
+**Palavras-chave:** Computação Paralela. Java Fork/Join. Speedup. Ordenação.
+
+---
+
+## 2. INTRODUÇÃO
+
+A computação paralela é essencial para otimizar o processamento em hardware moderno. Este projeto compara o comportamento de algoritmos $O(n^2)$ e $O(n \log n)$, avaliando em quais cenários a divisão de tarefas entre múltiplos núcleos de processamento compensa o custo de gerenciamento do sistema operacional e da JVM.
+
+---
+
+## 3. METODOLOGIA
+
+### 3.1. Hardware e Ambiente de Teste
+* **Processador:** Intel Core i5-8265U (4 núcleos físicos / 8 threads lógicos).
+* **Memória:** 12GB RAM.
+* **SO:** Windows 11.
+* **Linguagem:** Java 21 (Framework Fork/Join).
+* **Análise de Dados:** Python 3.x no Jupyter Notebook (Pandas e Plotly).
+
+---
+
+## 4. IMPLEMENTAÇÃO TÉCNICA
+
+O projeto está estruturado nos seguintes arquivos:
+* **`SortAlgorithm.java`**: Interface base.
+* **`SortingProvider.java`**: Contém a lógica de ordenação.
+* **`Main.java`**: Controlador do framework de testes e exportação de dados.
+* **`analise_completa.ipynb`**: Notebook responsável pelo tratamento de dados e geração dos gráficos.
+
+---
+
+## 5. RESULTADOS E DISCUSSÃO
+
+### 5.1. Comparativo de Tempo
+Conforme os dados coletados, algoritmos como o **Bubble Sort** apresentaram os melhores resultados com paralelismo, reduzindo o tempo de execução médio de 116ms para cerca de 54ms em vetores de 10.000 posições.
+
+### 5.2. Análise de Speedup
+O gráfico de *Speedup* gerado no Jupyter confirmou a **Lei de Amdahl**. O ganho de desempenho não foi linear, estabilizando-se após a utilização de 4 threads, que corresponde ao número de núcleos físicos do processador utilizado.
+
+---
+
+## 6. CONCLUSÃO
+
+O trabalho validou que o paralelismo é uma ferramenta poderosa, mas deve ser aplicada criteriosamente. Para problemas "pequenos" ou algoritmos muito eficientes, o custo de coordenação das threads pode degradar a performance.
+
+---
+
+## 7. REFERÊNCIAS
+
+ASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. **NBR 6023**: informação e documentação: referências. Rio de Janeiro, 2018.  
+CORMEN, T. H. et al. **Algoritmos: teoria e prática**. 3. ed. Rio de Janeiro: Elsevier, 2012.
